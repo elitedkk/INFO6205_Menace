@@ -11,6 +11,9 @@ public class TTT_Main {
 	String[][] field;
 	
 	public TTT_Main() {
+		/*
+		 * Constructor
+		 */
 		this.x = "X";
 		this.o = "O";
 		this.total=9;
@@ -26,39 +29,11 @@ public class TTT_Main {
 		Scanner sc= new Scanner(System.in);
 		boolean gameEnds = false;
 		while(total>0) {
-			boolean mark = false;
-			int[] co;
-			while(!mark) {
-				if (total> 0) {
-					co = getCommand(p1,sc);
-					mark = Mark(co[0], co[1], p1);
-					if(mark) {
-						gameEnds = CheckifWin(p1,co[0],co[1]);
-						if(gameEnds) {
-							System.out.println("Game has ended. " + p1.getName() + " with " + p1.getMark() + " has won");
-						}
-					}
-				}
-			}
-			//System.out.println("Total squares remain: " + Integer.toString(this.total));
+			gameEnds = RunThePlayer(p1, sc);
 			drawBoard();
 			if(gameEnds) break;			
 			
-			mark = false;
-			while(!mark) {
-				if (total> 0) {
-					co = getCommand(p2,sc);
-					mark = Mark(co[0], co[1], p2);
-					if(mark) {
-						gameEnds = CheckifWin(p2,co[0],co[1]);
-						if(gameEnds) {
-							System.out.println("Game has ended. " + p2.getName() + " with " + p2.getMark() + " has won");
-						}
-					}
-				}
-				else break;
-			}
-			//System.out.println("Total squares remain: " + Integer.toString(this.total));
+			gameEnds = RunThePlayer(p2, sc);
 			drawBoard();
 			if(gameEnds) break;
 			
@@ -66,6 +41,31 @@ public class TTT_Main {
 		}
 		if (!gameEnds) System.out.println("The game drawed out. No one won");
 		sc.close();
+	}
+	
+	private boolean RunThePlayer(Players p, Scanner sc) {
+		/*
+		 * Get the command, mark it and check if the player won
+		 * @param p - The player
+		 * @param sc - The scanner context
+		 * @return if the move won the player the game
+		 */
+		boolean mark = false;
+		boolean gameEnds = false;
+		while(!mark) {
+			if (total> 0) {
+				int[] co = getCommand(p,sc);
+				mark = Mark(co[0], co[1], p);
+				if(mark) {
+					gameEnds = CheckifWin(p,co[0],co[1]);
+					if(gameEnds) {
+						System.out.println("Game has ended. " + p.getName() + " with " + p.getMark() + " has won");
+					}
+				}
+			}
+			else break;
+		}
+		return gameEnds;
 	}
 	
 	private boolean CheckifWin(Players player, int x, int y) {
@@ -132,6 +132,10 @@ public class TTT_Main {
 		 * @param player - The player who has just marked
 		 * @return - integer array, 0th element is x co-ordinate, 1st element is y co-ordinate
 		 */
+		if(x>2 || x<0 || y>2 || y<0) {
+			System.out.println("Invalid input, try again");
+			return false;
+		}
 		if (field[x][y] != this.x && field[x][y] != this.o) {
 			field[x][y] = player.getMark();
 		}
