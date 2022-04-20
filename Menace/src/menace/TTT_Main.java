@@ -1,11 +1,10 @@
 package menace;
-import java.io.*;
-//import java.io.BufferedReader;
-import java.io.InputStreamReader;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import java.util.Scanner;
 
 public class TTT_Main {
-	
+	private static Logger logger = LoggerFactory.getLogger(TTT_Main.class);
 	private String x;
 	private String o;
 	private int total;
@@ -36,16 +35,14 @@ public class TTT_Main {
 					if(mark) {
 						gameEnds = CheckifWin(p1,co[0],co[1]);
 						if(gameEnds) {
-							System.out.print("Game has ended. " + p1.getName() + " with " + p1.getMark() + " has won");
+							System.out.println("Game has ended. " + p1.getName() + " with " + p1.getMark() + " has won");
 						}
 					}
 				}
 			}
 			//System.out.println("Total squares remain: " + Integer.toString(this.total));
 			drawBoard();
-			if(gameEnds) break;
-			
-			
+			if(gameEnds) break;			
 			
 			mark = false;
 			while(!mark) {
@@ -55,7 +52,7 @@ public class TTT_Main {
 					if(mark) {
 						gameEnds = CheckifWin(p2,co[0],co[1]);
 						if(gameEnds) {
-							System.out.print("Game has ended. " + p2.getName() + " with " + p2.getMark() + " has won");
+							System.out.println("Game has ended. " + p2.getName() + " with " + p2.getMark() + " has won");
 						}
 					}
 				}
@@ -169,6 +166,7 @@ public class TTT_Main {
 	
 	public static void main(String[] args) {
 		TTT_Main tttM = new TTT_Main();
+		logger.info("Starting the program");
 		tttM.runtictactoe();
 	}
 
