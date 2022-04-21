@@ -9,15 +9,16 @@ public class Players {
 		this.name=name;
 	}
 	
-	public Players(String name, String mark) {
+	public Players(String name, String mark, boolean isComputer) {
 		this.name=name;
 		this.mark=mark;
-		this.isComputer=false;
+		this.isComputer=isComputer;
 	}
 	
 	public boolean isComputer() {
 		return this.isComputer;
 	}
+	
 	 public String getName() {
 		 return this.name;
 	 }
