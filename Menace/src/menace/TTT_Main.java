@@ -8,39 +8,61 @@ import java.util.Scanner;
 
 public class TTT_Main {
 	private static Logger logger = LoggerFactory.getLogger(TTT_Main.class);
-	private String x;
-	private String o;
+	public char x;
+	public char o;
 	private int total;
 	private boolean isTraining;
 	private int trainingGames;
 	char[] currState;
+	Tree auto;
 	//private boolean[] remaining;
-	String[][] field;
+	char[][] field;
 	
 	public TTT_Main() {
 		/*
 		 * Constructor
 		 */
-		this.x = "X";
-		this.o = "O";		
+		this.x = 'X';
+		this.o = 'O';		
 		isTraining = true;
-		Players p1 = new Players("Player 1",x, true);
-		Players p2 = new Players("Player 2",o, true);
-		Players human = new Players("Human", o, false);
-		this.trainingGames = 1000;
+		
+		Tree aifirstplay = new Tree(new char[3][3], false, this);
+		Tree aisecondplay = new Tree(new char[3][3], true, this);
+		aifirstplay.createTree();
+		System.out.println(Integer.toString(Tree.win));
+		aisecondplay.createTree();
+		Players p = new Players("Player 1",x, true);
+		Players human  = new Players("Human", o, false);
+		this.trainingGames = 10;
 		this.isTraining=true;
 		Scanner sc= new Scanner(System.in);
-		for(int i=0; i<this.trainingGames; i++) {
-			System.out.println("Starting game number " + Integer.toString(i+1));
-			field = new String[3][3];
-			this.runtictactoe(p1, p2, sc);
+		
+		field=new char[3][3];
+		int turn =0;
+		while (turn != 1 && turn != 2) {
+			turn=this.GetHumanWay(sc);
+			if(turn!=1 && turn!=2) System.out.println("Enter a correct value please");
 		}
+		
+		/*for(int i=0; i<this.trainingGames; i++) {
+			System.out.println("Starting game number " + Integer.toString(i+1));
+			field = new char[3][3];
+			this.runtictactoe(p1, p2, sc);
+		}*/
 		this.isTraining=false;
+		if(turn==1) {
+			auto = aisecondplay;
+			this.runtictactoe(human, p, sc, auto);
+		}
+		else {
+			auto = aifirstplay;
+			this.runtictactoe(p, human, sc, auto);
+		}
 		//this.runtictactoe(p1,human, sc);
 		sc.close();
 		
 	}
-	private void runtictactoe(Players p1, Players p2, Scanner sc) {
+	private void runtictactoe(Players p1, Players p2, Scanner sc, Tree t) {
 		/*
 		 * Start this game
 		 */
@@ -50,12 +72,17 @@ public class TTT_Main {
 		this.currState = new char[9];
 		Arrays.fill(currState, '0');
 		boolean gameEnds = false;
+		if(!p1.isComputer()) {
+			System.out.println("You will play first");
+			drawBoard();
+		}
 		while(total>0) {
 			gameEnds = RunThePlayer(p1, sc);
 			if(!p1.isComputer() || !p2.isComputer()) drawBoard();
 			if(gameEnds) {
 				break;			
 			}
+			
 			
 			gameEnds = RunThePlayer(p2, sc);
 			if(!p1.isComputer() || !p2.isComputer()) drawBoard();
@@ -79,10 +106,14 @@ public class TTT_Main {
 		while(!mark) {
 			if (total> 0) {
 				int[] co = getCommand(p,sc);
+				if(co==null) {
+					System.out.println("Null!!!!!");
+				}
 				mark = Mark(co[0], co[1], p);
 				if(mark) {
-					changeArray(p, co[0],co[1]);
-					gameEnds = CheckifWin(p,co[0],co[1]);
+					//changeArray(p, co[0],co[1]);
+					this.auto=this.auto.children[co[0]][co[1]];
+					gameEnds = CheckifWin(p,co[0],co[1],this.field);
 					if(gameEnds) {
 						System.out.println("Game has ended. " + p.getName() + " with " + p.getMark() + " has won");
 					}
@@ -93,7 +124,11 @@ public class TTT_Main {
 		return gameEnds;
 	}
 	
+	
 	private void changeArray(Players p, int x, int y) {
+		/*
+		 * Change the current state of the char array
+		 */
 		int ind = (x*3)+y;
 		char enter;
 		if(p.getMark()==this.x) enter='1';
@@ -102,15 +137,22 @@ public class TTT_Main {
 	}
 	
 	
-	private boolean CheckifWin(Players player, int x, int y) {
+	public boolean CheckIfWin(char[][] field, TTT_Main ttt) {
+		boolean isOneWon =  (CheckifWin(new Players("Player 1",x, true), 0, 0, field) || CheckifWin(new Players("Player 1",x, true), 1, 1, field) || CheckifWin(new Players("Player 1",x, true), 2, 2, field));
+		boolean isTwoWon =  (CheckifWin(new Players("Player 2",o, true), 0, 0, field) || CheckifWin(new Players("Player 2",o, true), 1, 1, field) || CheckifWin(new Players("Player 2",o, true), 2, 2, field));
+		return isOneWon || isTwoWon;
+	}
+	
+
+	private boolean CheckifWin(Players player, int x, int y, char[][] field) {
 		/*
 		 * Check it the player who just played has won
 		 */
-		if(WinCondition_Row(player,x,y) || WinCondition_Column(player,x,y) || WinCondition_Diag(player)) return true;
+		if(WinCondition_Row(player,x,y, field) || WinCondition_Column(player,x,y, field) || WinCondition_Diag(player, field)) return true;
 		else return false;
 	}
 	
-	private boolean WinCondition_Row(Players player, int x, int y) {
+	private boolean WinCondition_Row(Players player, int x, int y, char[][] field) {
 		/*
 		 * Check if the player by the row condition
 		 */
@@ -120,7 +162,7 @@ public class TTT_Main {
 		return true;
 	}
 	
-	private boolean WinCondition_Column(Players player, int x, int y) {
+	private boolean WinCondition_Column(Players player, int x, int y, char[][] field) {
 		/*
 		 * Check if the player by the column condition. Almost same as row condition but written seperately for the sake of readability
 		 */
@@ -130,7 +172,7 @@ public class TTT_Main {
 		return true;
 	}
 	
-	private boolean WinCondition_Diag(Players player) {
+	private boolean WinCondition_Diag(Players player, char[][] field) {
 		/*
 		 * Check if the player by the diagonal condition
 		 */
@@ -148,7 +190,7 @@ public class TTT_Main {
 		 */
 		for (int i=0; i<3; i++) {
 			for(int j=0; j<3; j++) {
-				if(field[i][j] == null) {
+				if(field[i][j] == 0) {
 					System.out.print(" ");
 				}
 				else System.out.print(field[i][j]);
@@ -199,8 +241,8 @@ public class TTT_Main {
 				return new int[] {i,j};
 			}
 			else {
-				//Access the memory to see which decision to take
-				return null;
+				int[] co = this.auto.getChildWithValue();
+				return co;
 			}
 			
 		}
@@ -210,14 +252,38 @@ public class TTT_Main {
 			String[] command = new String[2];
 			command = input.split(" ");
 			int[] co = {Integer.parseInt(command[0]),Integer.parseInt(command[1])};
-			System.out.println("You input " + Integer.toString(co[0]) + " " + Integer.toString(co[1]));
+			//System.out.println("You input " + Integer.toString(co[0]) + " " + Integer.toString(co[1]));
+			
 			return co;
 		}
 	}
 	
+	
+	private int GetHumanWay(Scanner sc) {
+		System.out.println("Enter 1 if human wants to go first, else 2");
+		String input = sc.nextLine();
+		int turn;
+		try {
+			turn = Integer.parseInt(input);
+		}
+		catch(Exception ex){
+			turn=0;
+		}
+		return turn;
+	}
 	private void waitForResults(Scanner sc) {
 		System.out.println("Look at the results");
-		String input = sc.next();
+		String input = sc.nextLine();
+	}
+	
+	public boolean getTotal(char[][] field) {
+		boolean result = true;
+		for(int i=0;i<field.length;i++) {
+			for(int j=0;j<field[i].length;j++) {
+				if(field[i][j]==0) return false;
+			}
+		}
+		return result;
 	}
 	
 	public static void main(String[] args) {
