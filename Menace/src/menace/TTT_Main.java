@@ -29,7 +29,7 @@ public class TTT_Main {
 		Tree aifirstplay = new Tree(new char[3][3], false, this);
 		Tree aisecondplay = new Tree(new char[3][3], true, this);
 		aifirstplay.createTree();
-		System.out.println(Integer.toString(Tree.win));
+		//System.out.println(Integer.toString(Tree.win));
 		aisecondplay.createTree();
 		Players p = new Players("Player 1",x, true);
 		Players human  = new Players("Human", o, false);

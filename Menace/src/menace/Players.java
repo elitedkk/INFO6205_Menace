@@ -1,6 +1,9 @@
 package menace;
 
 public class Players {
+	/*
+	 * Data class for Players
+	 */
 	private String name;
 	private char mark;
 	private boolean isComputer;
