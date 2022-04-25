@@ -1,15 +1,18 @@
 package menace;
 
 public class Players {
+	/*
+	 * Data class for Players
+	 */
 	private String name;
-	private String mark;
+	private char mark;
 	private boolean isComputer;
 	
 	public void setName(String name) {
 		this.name=name;
 	}
 	
-	public Players(String name, String mark, boolean isComputer) {
+	public Players(String name, char mark, boolean isComputer) {
 		this.name=name;
 		this.mark=mark;
 		this.isComputer=isComputer;
@@ -23,7 +26,7 @@ public class Players {
 		 return this.name;
 	 }
 	 
-	 public String getMark() {
+	 public char getMark() {
 		 return this.mark;
 	 }
 
