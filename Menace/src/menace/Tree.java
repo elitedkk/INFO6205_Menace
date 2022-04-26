@@ -1,5 +1,9 @@
 package menace;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import java.util.Random;
+
 
 public class Tree {
 	/*
@@ -7,7 +11,8 @@ public class Tree {
 	 * 
 	 * 
 	 */
-	//public static int win=0;
+
+	private static Logger logger = LoggerFactory.getLogger(TTT_Main.class);
 	//tracking the field
 	char[][] field = new char[3][3];
 	Tree[][] children = new Tree[3][3];
@@ -35,8 +40,12 @@ public class Tree {
 
 	
 	private int retScore(boolean isMin) {
-		if(isMin) return 1;
-		else return -1;
+		if(isMin) {
+			return 1;
+		}
+		else {
+			return -1;
+		}
 	}
 	public int createTree() {
 		if (ttt.CheckIfWin(field, this.ttt)) {

@@ -11,12 +11,14 @@ public class TTT_Main {
 	public char x;
 	public char o;
 	private int total;
-	private boolean isTraining;
-	private int trainingGames;
-	char[] currState;
+	private static Tree aifirstplay;
+	private static Tree aisecondplay;
 	Tree auto;
+	Tree auto2;
 	//private boolean[] remaining;
 	char[][] field;
+	public static Scanner sc;
+	Menace menace;
 	
 	public TTT_Main() {
 		/*
@@ -24,67 +26,76 @@ public class TTT_Main {
 		 */
 		this.x = 'X';
 		this.o = 'O';		
-		isTraining = true;
 		
-		Tree aifirstplay = new Tree(new char[3][3], false, this);
-		Tree aisecondplay = new Tree(new char[3][3], true, this);
-		aifirstplay.createTree();
-		//System.out.println(Integer.toString(Tree.win));
-		aisecondplay.createTree();
-		Players p = new Players("Player 1",x, true);
-		Players human  = new Players("Human", o, false);
-		this.trainingGames = 10;
-		this.isTraining=true;
-		Scanner sc= new Scanner(System.in);
+		Tree firstPlay = new Tree(new char[3][3], false, this);
+		Tree secondPlay = new Tree(new char[3][3], true, this);
+		
+		firstPlay.createTree();
+		secondPlay.createTree();
+		//aifirstplay = firstPlay;
+		//aisecondplay = secondPlay;
+		
+		
+		Players p = new Players("My Player",x, true, true);
+		Players human  = new Players("Human", o, false, false);
+		
+		Players human_sim = new Players("My Player",x, true, false);
+		Players menacePlayer  = new Players("Menace", o, true, true);
+		
+		menace = new Menace(this);
 		
 		field=new char[3][3];
 		int turn =0;
-		while (turn != 1 && turn != 2) {
-			turn=this.GetHumanWay(sc);
-			if(turn!=1 && turn!=2) System.out.println("Enter a correct value please");
+		if(!human_sim.isComputer() || !menacePlayer.isComputer()) {
+			while (turn != 1 && turn != 2) {
+				turn=this.GetHumanWay();
+				if(turn!=1 && turn!=2) System.out.println("Enter a correct value please");
+			}
 		}
 		
-		/*for(int i=0; i<this.trainingGames; i++) {
+		//Training Meance
+		for(int i=0; i<Menace.trainingGames; i++) {
 			System.out.println("Starting game number " + Integer.toString(i+1));
 			field = new char[3][3];
-			this.runtictactoe(p1, p2, sc);
-		}*/
+			auto = firstPlay;
+			this.runtictactoe(human_sim, menacePlayer);
+		}
+		
+		
+		/*
 		this.isTraining=false;
 		if(turn==1) {
 			auto = aisecondplay;
-			this.runtictactoe(human, p, sc, auto);
+			this.runtictactoe(human, p, auto);
 		}
 		else {
 			auto = aifirstplay;
-			this.runtictactoe(p, human, sc, auto);
-		}
+			this.runtictactoe(p, human, auto);
+		}*/
 		//this.runtictactoe(p1,human, sc);
-		sc.close();
 		
 	}
-	private void runtictactoe(Players p1, Players p2, Scanner sc, Tree t) {
+	private void runtictactoe(Players p1, Players p2) {
 		/*
 		 * Start this game
 		 */
 		//remaining = new boolean[9];
 		//Arrays.fill(remaining, false);
 		this.total=9;
-		this.currState = new char[9];
-		Arrays.fill(currState, '0');
 		boolean gameEnds = false;
 		if(!p1.isComputer()) {
 			System.out.println("You will play first");
 			drawBoard();
 		}
 		while(total>0) {
-			gameEnds = RunThePlayer(p1, sc);
+			gameEnds = RunThePlayer(p1);
 			if(!p1.isComputer() || !p2.isComputer()) drawBoard();
 			if(gameEnds) {
 				break;			
 			}
 			
 			
-			gameEnds = RunThePlayer(p2, sc);
+			gameEnds = RunThePlayer(p2);
 			if(!p1.isComputer() || !p2.isComputer()) drawBoard();
 			if(gameEnds) {
 				break;
@@ -94,7 +105,7 @@ public class TTT_Main {
 		if (!gameEnds) System.out.println("The game drawed out. No one won");
 	}
 	
-	private boolean RunThePlayer(Players p, Scanner sc) {
+	private boolean RunThePlayer(Players p) {
 		/*
 		 * Get the command, mark it and check if the player won
 		 * @param p - The player
@@ -103,16 +114,17 @@ public class TTT_Main {
 		 */
 		boolean mark = false;
 		boolean gameEnds = false;
+		int[] co = new int[2];
 		while(!mark) {
 			if (total> 0) {
-				int[] co = getCommand(p,sc);
+				co = getCommand(p);
 				if(co==null) {
 					System.out.println("Null!!!!!");
 				}
 				mark = Mark(co[0], co[1], p);
 				if(mark) {
 					//changeArray(p, co[0],co[1]);
-					this.auto=this.auto.children[co[0]][co[1]];
+					if(!p.isMenace()) this.auto=this.auto.children[co[0]][co[1]];
 					gameEnds = CheckifWin(p,co[0],co[1],this.field);
 					if(gameEnds) {
 						System.out.println("Game has ended. " + p.getName() + " with " + p.getMark() + " has won");
@@ -120,7 +132,9 @@ public class TTT_Main {
 				}
 			}
 			else break;
+			//System.out.println(Boolean.toString(mark));
 		}
+		System.out.println(p.getName() + " marked x=" + Integer.toString(co[0]) + " and y=" + Integer.toString(co[1]));
 		return gameEnds;
 	}
 	
@@ -133,13 +147,14 @@ public class TTT_Main {
 		char enter;
 		if(p.getMark()==this.x) enter='1';
 		else enter = '2';
-		this.currState[ind] = enter;
 	}
 	
 	
 	public boolean CheckIfWin(char[][] field, TTT_Main ttt) {
-		boolean isOneWon =  (CheckifWin(new Players("Player 1",x, true), 0, 0, field) || CheckifWin(new Players("Player 1",x, true), 1, 1, field) || CheckifWin(new Players("Player 1",x, true), 2, 2, field));
-		boolean isTwoWon =  (CheckifWin(new Players("Player 2",o, true), 0, 0, field) || CheckifWin(new Players("Player 2",o, true), 1, 1, field) || CheckifWin(new Players("Player 2",o, true), 2, 2, field));
+		Players p1 = new Players("Player 1",x, true, false);
+		Players p2 = new Players("Player 2",x, true, false);
+		boolean isOneWon =  (CheckifWin(p1, 0, 0, field) || CheckifWin(p1, 1, 1, field) || CheckifWin(p1, 2, 2, field));
+		boolean isTwoWon =  (CheckifWin(p2, 0, 0, field) || CheckifWin(p2, 1, 1, field) || CheckifWin(p2, 2, 2, field));
 		return isOneWon || isTwoWon;
 	}
 	
@@ -225,7 +240,7 @@ public class TTT_Main {
 		return true;
 	}
 	
-	private int[] getCommand(Players player, Scanner sc) {
+	private int[] getCommand(Players player) {
 		/*
 		 * Get the command for the mentioned player
 		 * @param player - The player who will be playing this turn
@@ -233,15 +248,15 @@ public class TTT_Main {
 		 * @return - integer array, 0th element is x co-ordinate, 1st element is y co-ordinate
 		 */
 		if(player.isComputer()) {
-			if(this.isTraining) {
-				int i=0,j=0;
-				int rand = new Random().nextInt(9);
-				i = rand/3;
-				j = rand%3;
-				return new int[] {i,j};
+			if(player.isMenace()) {
+				//System.out.println("Get a command");
+				int[] co = menace.getAMove(this.field);
+				System.out.println("Order from Menace");
+				return co;
 			}
 			else {
 				int[] co = this.auto.getChildWithValue();
+				System.out.println("Order from the player");
 				return co;
 			}
 			
@@ -259,7 +274,7 @@ public class TTT_Main {
 	}
 	
 	
-	private int GetHumanWay(Scanner sc) {
+	private int GetHumanWay() {
 		System.out.println("Enter 1 if human wants to go first, else 2");
 		String input = sc.nextLine();
 		int turn;
@@ -271,7 +286,7 @@ public class TTT_Main {
 		}
 		return turn;
 	}
-	private void waitForResults(Scanner sc) {
+	private void waitForResults() {
 		System.out.println("Look at the results");
 		String input = sc.nextLine();
 	}
@@ -288,7 +303,9 @@ public class TTT_Main {
 	
 	public static void main(String[] args) {
 		logger.info("Starting the program");
+		sc= new Scanner(System.in);
 		TTT_Main tttM = new TTT_Main();
+		sc.close();
 	}
 
 }
