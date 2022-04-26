@@ -91,6 +91,7 @@ public class TTT_Main {
 			gameEnds = RunThePlayer(p1);
 			if(!p1.isComputer() || !p2.isComputer()) drawBoard();
 			if(gameEnds) {
+				System.out.println("Game has ended. " + p1.getName() + " with " + p1.getMark() + " has won");
 				break;			
 			}
 			
@@ -98,6 +99,7 @@ public class TTT_Main {
 			gameEnds = RunThePlayer(p2);
 			if(!p1.isComputer() || !p2.isComputer()) drawBoard();
 			if(gameEnds) {
+				System.out.println("Game has ended. " + p2.getName() + " with " + p2.getMark() + " has won");
 				break;
 			}
 			
@@ -114,39 +116,25 @@ public class TTT_Main {
 		 */
 		boolean mark = false;
 		boolean gameEnds = false;
-		int[] co = new int[2];
+		//int[] co = new int[2];
 		while(!mark) {
 			if (total> 0) {
-				co = getCommand(p);
+				int[] co  = getCommand(p);
 				if(co==null) {
 					System.out.println("Null!!!!!");
 				}
 				mark = Mark(co[0], co[1], p);
 				if(mark) {
-					//changeArray(p, co[0],co[1]);
-					this.auto=this.auto.children[co[0]][co[1]];
+					auto=auto.children[co[0]][co[1]];
 					gameEnds = CheckifWin(p,co[0],co[1],this.field);
-					if(gameEnds) {
-						System.out.println("Game has ended. " + p.getName() + " with " + p.getMark() + " has won");
-					}
+					System.out.println(p.getName() + " marked x=" + Integer.toString(co[0]) + " and y=" + Integer.toString(co[1]));
 				}
 			}
 			else break;
 			//System.out.println(Boolean.toString(mark));
 		}
-		System.out.println(p.getName() + " marked x=" + Integer.toString(co[0]) + " and y=" + Integer.toString(co[1]));
+		//System.out.println(p.getName() + " marked x=" + Integer.toString(co[0]) + " and y=" + Integer.toString(co[1]));
 		return gameEnds;
-	}
-	
-	
-	private void changeArray(Players p, int x, int y) {
-		/*
-		 * Change the current state of the char array
-		 */
-		int ind = (x*3)+y;
-		char enter;
-		if(p.getMark()==this.x) enter='1';
-		else enter = '2';
 	}
 	
 	
@@ -286,6 +274,7 @@ public class TTT_Main {
 		}
 		return turn;
 	}
+	
 	private void waitForResults() {
 		System.out.println("Look at the results");
 		String input = sc.nextLine();
