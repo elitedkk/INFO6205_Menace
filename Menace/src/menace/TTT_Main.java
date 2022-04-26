@@ -52,17 +52,17 @@ public class TTT_Main {
 		this.isTraining=false;
 		if(turn==1) {
 			auto = aisecondplay;
-			this.runtictactoe(human, p, sc, auto);
+			this.runtictactoe(human, p, sc);
 		}
 		else {
 			auto = aifirstplay;
-			this.runtictactoe(p, human, sc, auto);
+			this.runtictactoe(p, human, sc);
 		}
 		//this.runtictactoe(p1,human, sc);
 		sc.close();
 		
 	}
-	private void runtictactoe(Players p1, Players p2, Scanner sc, Tree t) {
+	private void runtictactoe(Players p1, Players p2, Scanner sc) {
 		/*
 		 * Start this game
 		 */
