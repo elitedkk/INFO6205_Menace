@@ -243,7 +243,7 @@ public class TTT_Main {
 				return co;
 			}
 			else {
-				int[] co = this.auto.getChildWithValue();
+				int[] co = auto.getChildWithValue();
 				//System.out.println("Order from the player");
 				return co;
 			}

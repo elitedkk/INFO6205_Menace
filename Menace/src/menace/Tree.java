@@ -11,8 +11,6 @@ public class Tree {
 	 * 
 	 * 
 	 */
-
-	private static Logger logger = LoggerFactory.getLogger(TTT_Main.class);
 	//tracking the field
 	char[][] field = new char[3][3];
 	Tree[][] children = new Tree[3][3];
