@@ -65,7 +65,7 @@ public class Menace {
 		}
 		int getSum = bd.sum;
 		int rand = getRandomNum(0,getSum);
-		//System.out.println("Random number = " + Integer.toString(rand));
+		System.out.println("Random number = " + Integer.toString(rand));
 		int index = bd.getByProbability(rand);
 		return getIandJ(index);
 	}

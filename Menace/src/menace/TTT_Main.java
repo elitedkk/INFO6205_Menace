@@ -124,7 +124,7 @@ public class TTT_Main {
 				mark = Mark(co[0], co[1], p);
 				if(mark) {
 					//changeArray(p, co[0],co[1]);
-					if(!p.isMenace()) this.auto=this.auto.children[co[0]][co[1]];
+					this.auto=this.auto.children[co[0]][co[1]];
 					gameEnds = CheckifWin(p,co[0],co[1],this.field);
 					if(gameEnds) {
 						System.out.println("Game has ended. " + p.getName() + " with " + p.getMark() + " has won");
@@ -256,7 +256,7 @@ public class TTT_Main {
 			}
 			else {
 				int[] co = this.auto.getChildWithValue();
-				System.out.println("Order from the player");
+				//System.out.println("Order from the player");
 				return co;
 			}
 			
