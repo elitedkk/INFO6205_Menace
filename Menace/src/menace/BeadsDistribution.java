@@ -21,22 +21,21 @@ public class BeadsDistribution {
 	}
 	
 	public void updateBeads(int index, int update) {
-		int diff = -1;
 		if((beads[index]+update)<0) {
-			diff = beads[index];
+			sum = sum - beads[index];
 			beads[index]=0;
 		}
-		else beads[index]+=update;
-		
-		if (diff!=-1) {
-			sum-=diff;
+		else {
+			beads[index]+=update;
+			sum+=update;
 		}
-		else sum+=update;
+		
 	}
 	
 	public int getByProbability(int random) {
 		int tempSum=0;
 		for(int i=0; i<9; i++) {
+			//System.out.println("at " + Integer.toString(i) + ", number of beads " + Integer.toString(beads[i]));
 			tempSum+=beads[i];
 			if (random<=tempSum) return i;
 		}

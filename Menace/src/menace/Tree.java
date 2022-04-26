@@ -12,6 +12,7 @@ public class Tree {
 	 * 
 	 */
 	//tracking the field
+	public static int win=0;
 	char[][] field = new char[3][3];
 	Tree[][] children = new Tree[3][3];
 
@@ -39,6 +40,7 @@ public class Tree {
 	
 	private int retScore(boolean isMin) {
 		if(isMin) {
+			win++;
 			return 1;
 		}
 		else {

@@ -31,12 +31,16 @@ public class TTT_Main {
 		Tree secondPlay = new Tree(new char[3][3], true, this);
 		
 		firstPlay.createTree();
+		System.out.println("win= " + Integer.toString(Tree.win));
+		Tree.win=0;
 		secondPlay.createTree();
+		System.out.println("win= " + Integer.toString(Tree.win));
+		
 		//aifirstplay = firstPlay;
 		//aisecondplay = secondPlay;
 		
 		
-		Players p = new Players("My Player",x, true, true);
+		Players p = new Players("My Player",x, true, false);
 		Players human  = new Players("Human", o, false, false);
 		
 		Players human_sim = new Players("My Player",x, true, false);
@@ -54,23 +58,30 @@ public class TTT_Main {
 		}
 		
 		//Training Meance
+		
 		for(int i=0; i<Menace.trainingGames; i++) {
-			System.out.println("Starting game number " + Integer.toString(i+1));
+			//System.out.println("Starting game number " + Integer.toString(i+1));
+			logger.debug("Starting game number " + Integer.toString(i+1));
 			field = new char[3][3];
-			auto = firstPlay;
+			this.auto = firstPlay;
 			this.runtictactoe(human_sim, menacePlayer);
 		}
+		logger.info("Number of wins = " + Menace.totalwin);
+		logger.info("Number of losses = " + Menace.totallose);
+		logger.info("Number of draw = " + Menace.totaldraw);
 		
 		
 		/*
-		this.isTraining=false;
+		System.out.println("Starting ...");
+		turn=2;
+		field = new char[3][3];
 		if(turn==1) {
-			auto = aisecondplay;
-			this.runtictactoe(human, p, auto);
+			auto = secondPlay;
+			this.runtictactoe(human, p);
 		}
 		else {
-			auto = aifirstplay;
-			this.runtictactoe(p, human, auto);
+			auto = firstPlay;
+			this.runtictactoe(p, human);
 		}*/
 		//this.runtictactoe(p1,human, sc);
 		
@@ -91,7 +102,9 @@ public class TTT_Main {
 			gameEnds = RunThePlayer(p1);
 			if(!p1.isComputer() || !p2.isComputer()) drawBoard();
 			if(gameEnds) {
-				System.out.println("Game has ended. " + p1.getName() + " with " + p1.getMark() + " has won");
+				//System.out.println("Game has ended. " + p1.getName() + " with " + p1.getMark() + " has won");
+				if (p2.isMenace()) menace.UpdateAfterCondition(field, -1);
+				if (p1.isMenace()) menace.UpdateAfterCondition(field, 1);
 				break;			
 			}
 			
@@ -99,12 +112,18 @@ public class TTT_Main {
 			gameEnds = RunThePlayer(p2);
 			if(!p1.isComputer() || !p2.isComputer()) drawBoard();
 			if(gameEnds) {
-				System.out.println("Game has ended. " + p2.getName() + " with " + p2.getMark() + " has won");
+				//System.out.println("Game has ended. " + p2.getName() + " with " + p2.getMark() + " has won");
+				if (p2.isMenace()) menace.UpdateAfterCondition(field, 1);
+				if (p1.isMenace()) menace.UpdateAfterCondition(field, -1);
 				break;
 			}
 			
 		}
-		if (!gameEnds) System.out.println("The game drawed out. No one won");
+		if (!gameEnds) {
+			//System.out.println("The game drawed out. No one won");
+			if (p2.isMenace()) menace.UpdateAfterCondition(field, 0);
+			if (p1.isMenace()) menace.UpdateAfterCondition(field, 0);
+		}
 	}
 	
 	private boolean RunThePlayer(Players p) {
@@ -117,17 +136,27 @@ public class TTT_Main {
 		boolean mark = false;
 		boolean gameEnds = false;
 		//int[] co = new int[2];
+		
+		//probability of the human to play in the zone, probBased=true, if in the zone
+		boolean probBased = false;
+		if (p.isComputer() && !p.isMenace()) {
+			int rand = menace.getRandomNum(0, 100);
+			if (rand>Menace.prob) probBased = true;
+		}
 		while(!mark) {
 			if (total> 0) {
-				int[] co  = getCommand(p);
+				int[] co  = getCommand(p, probBased);
 				if(co==null) {
 					System.out.println("Null!!!!!");
 				}
 				mark = Mark(co[0], co[1], p);
 				if(mark) {
-					auto=auto.children[co[0]][co[1]];
+					this.auto=this.auto.children[co[0]][co[1]];
 					gameEnds = CheckifWin(p,co[0],co[1],this.field);
-					System.out.println(p.getName() + " marked x=" + Integer.toString(co[0]) + " and y=" + Integer.toString(co[1]));
+					if (p.isMenace()) {
+						menace.markConfirmed();
+					}
+					//System.out.println(p.getName() + " marked x=" + Integer.toString(co[0]) + " and y=" + Integer.toString(co[1]));
 				}
 			}
 			else break;
@@ -140,7 +169,7 @@ public class TTT_Main {
 	
 	public boolean CheckIfWin(char[][] field, TTT_Main ttt) {
 		Players p1 = new Players("Player 1",x, true, false);
-		Players p2 = new Players("Player 2",x, true, false);
+		Players p2 = new Players("Player 2",o, true, false);
 		boolean isOneWon =  (CheckifWin(p1, 0, 0, field) || CheckifWin(p1, 1, 1, field) || CheckifWin(p1, 2, 2, field));
 		boolean isTwoWon =  (CheckifWin(p2, 0, 0, field) || CheckifWin(p2, 1, 1, field) || CheckifWin(p2, 2, 2, field));
 		return isOneWon || isTwoWon;
@@ -228,7 +257,7 @@ public class TTT_Main {
 		return true;
 	}
 	
-	private int[] getCommand(Players player) {
+	private int[] getCommand(Players player, boolean prob) {
 		/*
 		 * Get the command for the mentioned player
 		 * @param player - The player who will be playing this turn
@@ -239,11 +268,22 @@ public class TTT_Main {
 			if(player.isMenace()) {
 				//System.out.println("Get a command");
 				int[] co = menace.getAMove(this.field);
-				System.out.println("Order from Menace");
+				//System.out.println("Order from Menace");
 				return co;
 			}
 			else {
-				int[] co = auto.getChildWithValue();
+				//Probabilty based best move
+				int[] co;
+				if (prob) {
+					int i=0,j=0;
+					//int rand = new Random().nextInt(9);
+					int rand = menace.getRandomNum(0, 8);
+					co = menace.getIandJ(rand);
+					//co = new int[] {i,j};
+				}
+				else {
+					co= this.auto.getChildWithValue();
+				}
 				//System.out.println("Order from the player");
 				return co;
 			}
