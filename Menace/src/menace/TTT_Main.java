@@ -2,16 +2,17 @@ package menace;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Arrays;
+import java.util.Random;
 import java.util.Scanner;
 
 public class TTT_Main {
 	private static Logger logger = LoggerFactory.getLogger(TTT_Main.class);
 	public char x;
 	public char o;
-
 	private int total;
-	private static Tree aifirstplay;
-	private static Tree aisecondplay;
+	//private static Tree aifirstplay;
+	//private static Tree aisecondplay;
 	public static boolean isFinal=false;
 	Tree auto;
 	Tree auto2;
@@ -51,7 +52,7 @@ public class TTT_Main {
 		useProb = true;
 		//field=new char[3][3];
 		
-		/*
+		
 		for(int i=0; i<Menace.trainingGames; i++) {
 			//System.out.println("Starting game number " + Integer.toString(i+1));
 			logger.info("Starting game number " + Integer.toString(i+1));
@@ -63,10 +64,6 @@ public class TTT_Main {
 			}
 			this.runtictactoe(menacePlayer1, human_sim2);
 		}
-
-		 */
-
-
 		
 		//Training Meance for playing second player
 		/*for(int i=0; i<Menace.trainingGames; i++) {
@@ -76,9 +73,9 @@ public class TTT_Main {
 			this.auto = firstPlay;
 			this.runtictactoe(human_sim1, menacePlayer2);
 		}*/
-		logger.info("Number of wins = " + Menace.totalwin);
-		logger.info("Number of losses = " + Menace.totallose);
-		logger.info("Number of draw = " + Menace.totaldraw);
+		logger.debug("Number of wins = " + Menace.totalwin);
+		logger.debug("Number of losses = " + Menace.totallose);
+		logger.debug("Number of draw = " + Menace.totaldraw);
 		
 		
 		/*
@@ -196,7 +193,7 @@ public class TTT_Main {
 	}
 	
 
-	public boolean CheckifWin(Players player, int x, int y, char[][] field) {
+	private boolean CheckifWin(Players player, int x, int y, char[][] field) {
 		/*
 		 * Check it the player who just played has won
 		 */
@@ -204,7 +201,7 @@ public class TTT_Main {
 		else return false;
 	}
 	
-	public boolean WinCondition_Row(Players player, int x, int y, char[][] field) {
+	private boolean WinCondition_Row(Players player, int x, int y, char[][] field) {
 		/*
 		 * Check if the player by the row condition
 		 */
@@ -214,7 +211,7 @@ public class TTT_Main {
 		return true;
 	}
 	
-	public boolean WinCondition_Column(Players player, int x, int y, char[][] field) {
+	private boolean WinCondition_Column(Players player, int x, int y, char[][] field) {
 		/*
 		 * Check if the player by the column condition. Almost same as row condition but written seperately for the sake of readability
 		 */
@@ -224,7 +221,7 @@ public class TTT_Main {
 		return true;
 	}
 	
-	public boolean WinCondition_Diag(Players player, char[][] field) {
+	private boolean WinCondition_Diag(Players player, char[][] field) {
 		/*
 		 * Check if the player by the diagonal condition
 		 */
@@ -255,11 +252,11 @@ public class TTT_Main {
 	
 	private boolean Mark(int x, int y, Players player) {
 		/*
-		 * Get the command for the mentioned player
-		 * @param x - The player who will be playing this turn
-		 * @param y - The scanner object
+		 * Mark the 
+		 * @param x - x co-ordinate for the move
+		 * @param y - y co-ordinate
 		 * @param player - The player who has just marked
-		 * @return - integer array, 0th element is x co-ordinate, 1st element is y co-ordinate
+		 * @return - boolean returns true if the mark was successful
 		 */
 		if(x>2 || x<0 || y>2 || y<0) {
 			System.out.println("Invalid input, try again");
@@ -281,7 +278,7 @@ public class TTT_Main {
 		/*
 		 * Get the command for the mentioned player
 		 * @param player - The player who will be playing this turn
-		 * @param sc - The scanner object incase a human is playing
+		 * @param prob - If true, the player is going to make a random move
 		 * @return - integer array, 0th element is x co-ordinate, 1st element is y co-ordinate
 		 */
 		if(player.isComputer()) {
