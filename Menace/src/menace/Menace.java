@@ -2,12 +2,8 @@ package menace;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import java.util.Random;
-import java.util.Stack;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+
+import java.util.*;
 
 
 public class Menace {
@@ -141,7 +137,7 @@ public class Menace {
 		}
 		return create;
 	}
-	
+	/*
 	public char[][] createFieldFromString(String key) {
 		char[][] field = new char[3][3];
 		for(int i=0; i<key.length(); i++) {
@@ -149,6 +145,8 @@ public class Menace {
 		}
 		return field;
 	}
+
+	 */
 	
 	public void UpdateAfterCondition(char[][] field, int condition) {
 		String f = createStringFromField(field);
@@ -209,7 +207,7 @@ public class Menace {
 		return new int[] {index/3, index%3};
 	}
 	
-	private int getIndex(int x, int y) {
+	public int getIndex(int x, int y) {
 		return (x*3) + y;
 	}
 }
