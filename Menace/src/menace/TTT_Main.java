@@ -78,13 +78,12 @@ public class TTT_Main {
 		logger.debug("Number of draw = " + Menace.totaldraw);
 		
 		
-		/*
+		menacePlayer1  = new Players("Menace", x, true, true);
 		while(true) {
-			menacePlayer1  = new Players("Menace", x, true, true);
 			field = new char[3][3];
-			this.auto= firstPlay;
+			this.auto= secondPlay;
 			this.runtictactoe(menacePlayer1, human);
-		}*/
+		}
 		/*int turn =0;
 		if(!human_sim1.isComputer() || !menacePlayer2.isComputer()) {
 			while (turn != 1 && turn != 2) {

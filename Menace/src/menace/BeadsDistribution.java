@@ -13,6 +13,18 @@ public class BeadsDistribution {
 		sum=beads.length*Menace.alpha;
 	}
 	
+	public BeadsDistribution(String situation) {
+		beads = new int[9];
+		Arrays.fill(beads, Menace.alpha);
+		sum=beads.length*Menace.alpha;
+		for(int i=0; i<beads.length;i++) {
+			if (situation.charAt(i)=='x' || situation.charAt(i)=='X' || situation.charAt(i)=='o' || situation.charAt(i)=='O') {
+				sum-=beads[i];
+				beads[i]=0;
+			}
+		}
+	}
+	
 	public BeadsDistribution(int index, int first) {
 		beads = new int[9];
 		Arrays.fill(beads, Menace.alpha);

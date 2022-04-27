@@ -13,7 +13,7 @@ import java.util.Map;
 public class Menace {
 	private static Logger logger = LoggerFactory.getLogger(TTT_Main.class);
 	
-	public static int trainingGames = 500000;
+	public static int trainingGames = 1000000;
 	public static int totalwin=0;
 	public static int totallose=0;
 	public static int totaldraw=0;
@@ -33,10 +33,10 @@ public class Menace {
 	private int loopThreshold = 10;
 	
 	public static int alpha=10; //Starting number of beads
-	public static int beta=3; //Adding beads after winning
+	public static int beta=2; //Adding beads after winning
 	public static int gamma=-1; //Removing beads after losing
 	public static int delta=1; //Adding beads after drawing
-	public static int prob = 90; //Probability of human to take optimum decision
+	public static int prob = 80; //Probability of human to take optimum decision
 	public TTT_Main ttt;
 	//public Stack<SitAndChoice> keys;
 	private List<SitAndChoice> keys;
@@ -64,6 +64,7 @@ public class Menace {
 		}
 		else {
 			BeadsDistribution bd = new BeadsDistribution(index,points);
+			logger.info("Goes here?");
 			memory.put(situation, bd);
 			logger.debug("Adding starting beads at " + situation + " at index= " + Integer.toString(index) + " by " + Integer.toString(points));
 		}
@@ -100,17 +101,17 @@ public class Menace {
 			bd = memory.get(situation);
 		}
 		else {
-			bd = new BeadsDistribution();
+			bd = new BeadsDistribution(situation);
 			memory.put(situation, bd);
 		}
-		/*if (TTT_Main.isFinal) {
+		if (TTT_Main.isFinal) {
 			int[] b = bd.beads;
 			String str="";
 			for(int i=0; i<b.length; i++) {
 				str+=Integer.toString(b[i]) + " ";
 			}
 			logger.info("The distribution of beads: " + str);
-		}*/
+		}
 		int getSum = bd.sum;
 		if (loopThreshold<0) {
 			logger.debug("Ran out of beads for situation= " + situation);
@@ -182,9 +183,9 @@ public class Menace {
 		
 		int index;
 		String situation;
-		if(runninggame%10000==0) {
+		if(runninggame%1000==0) {
 			//logger.debug("For ten thousand games: -> wins= " + Integer.toString(totalwin-runwin) + " losses= " + Integer.toString(totallose-runlose) + " draws= " + Integer.toString(totaldraw-rundraw));
-			logger.info("Stats for last ten thousang games-> wins= " + Integer.toString(totalwin-runwin) + " losses= " + Integer.toString(totallose-runlose) + " draws= " + Integer.toString(totaldraw-rundraw));
+			//logger.info("Stats for last thousand games-> wins= " + Integer.toString(totalwin-runwin) + " losses= " + Integer.toString(totallose-runlose) + " draws= " + Integer.toString(totaldraw-rundraw));
 			rundraw=totaldraw;
 			runwin=totalwin;
 			runlose=totallose;
