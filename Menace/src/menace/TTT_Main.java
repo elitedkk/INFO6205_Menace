@@ -55,7 +55,7 @@ public class TTT_Main {
 		
 		for(int i=0; i<Menace.trainingGames; i++) {
 			//System.out.println("Starting game number " + Integer.toString(i+1));
-			logger.info("Starting game number " + Integer.toString(i+1));
+			//logger.info("Starting game number " + Integer.toString(i+1));
 			field = new char[3][3];
 			this.auto = secondPlay;
 			if(i== Menace.trainingGames-1) {
@@ -193,7 +193,7 @@ public class TTT_Main {
 	}
 	
 
-	private boolean CheckifWin(Players player, int x, int y, char[][] field) {
+	public boolean CheckifWin(Players player, int x, int y, char[][] field) {
 		/*
 		 * Check it the player who just played has won
 		 */
@@ -201,7 +201,7 @@ public class TTT_Main {
 		else return false;
 	}
 	
-	private boolean WinCondition_Row(Players player, int x, int y, char[][] field) {
+	public boolean WinCondition_Row(Players player, int x, int y, char[][] field) {
 		/*
 		 * Check if the player by the row condition
 		 */
@@ -211,7 +211,7 @@ public class TTT_Main {
 		return true;
 	}
 	
-	private boolean WinCondition_Column(Players player, int x, int y, char[][] field) {
+	public boolean WinCondition_Column(Players player, int x, int y, char[][] field) {
 		/*
 		 * Check if the player by the column condition. Almost same as row condition but written seperately for the sake of readability
 		 */
@@ -221,7 +221,7 @@ public class TTT_Main {
 		return true;
 	}
 	
-	private boolean WinCondition_Diag(Players player, char[][] field) {
+	public boolean WinCondition_Diag(Players player, char[][] field) {
 		/*
 		 * Check if the player by the diagonal condition
 		 */

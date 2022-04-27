@@ -154,10 +154,10 @@ public class Menace {
 		String f = createStringFromField(field);
 		int points = 0;
 		runninggame++;
-		logger.info("alpha= " + alpha + "; beta= " + beta + "; gamma= " + gamma + "; delta= " + delta + "; p= " + prob);
+		//logger.info("alpha= " + alpha + "; beta= " + beta + "; gamma= " + gamma + "; delta= " + delta + "; p= " + prob);
 		if (condition == 0) {
 			//draw
-			logger.info("Draw at " + f);
+			//logger.info("Draw at " + f);
 			if(TTT_Main.isFinal) logger.info("Menace drew");
 			//System.out.println("Draw at " + f);
 			totaldraw++;
@@ -167,7 +167,7 @@ public class Menace {
 			//win
 			points = Menace.beta;
 			totalwin++;
-			logger.info("Win at " + f);
+			//logger.info("Win at " + f);
 			if(TTT_Main.isFinal) logger.info("Menace won");
 			//System.out.println("Win at " + f);
 		}
@@ -175,7 +175,7 @@ public class Menace {
 			//lose
 			points = Menace.gamma;
 			totallose++;
-			logger.info("Loss at " + f);
+			//logger.info("Loss at " + f);
 			if(TTT_Main.isFinal) logger.info("Menace lost");
 			//System.out.println("Loss at " + f);
 		}
@@ -210,7 +210,7 @@ public class Menace {
 		return new int[] {index/3, index%3};
 	}
 	
-	private int getIndex(int x, int y) {
+	public int getIndex(int x, int y) {
 		return (x*3) + y;
 	}
 }
