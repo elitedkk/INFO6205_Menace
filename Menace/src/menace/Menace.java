@@ -13,7 +13,7 @@ import java.util.Map;
 public class Menace {
 	private static Logger logger = LoggerFactory.getLogger(TTT_Main.class);
 	
-	public static int trainingGames = 10000000;
+	public static int trainingGames = 500000;
 	public static int totalwin=0;
 	public static int totallose=0;
 	public static int totaldraw=0;
@@ -36,7 +36,7 @@ public class Menace {
 	public static int beta=3; //Adding beads after winning
 	public static int gamma=-1; //Removing beads after losing
 	public static int delta=1; //Adding beads after drawing
-	public static int prob = 70; //Probability of human to take optimum decision
+	public static int prob = 90; //Probability of human to take optimum decision
 	public TTT_Main ttt;
 	//public Stack<SitAndChoice> keys;
 	private List<SitAndChoice> keys;
@@ -183,7 +183,8 @@ public class Menace {
 		int index;
 		String situation;
 		if(runninggame%10000==0) {
-			logger.debug("For ten thousand games: -> wins= " + Integer.toString(totalwin-runwin) + " losses= " + Integer.toString(totallose-runlose) + " draws= " + Integer.toString(totaldraw-rundraw));
+			//logger.debug("For ten thousand games: -> wins= " + Integer.toString(totalwin-runwin) + " losses= " + Integer.toString(totallose-runlose) + " draws= " + Integer.toString(totaldraw-rundraw));
+			logger.info("Stats for last ten thousang games-> wins= " + Integer.toString(totalwin-runwin) + " losses= " + Integer.toString(totallose-runlose) + " draws= " + Integer.toString(totaldraw-rundraw));
 			rundraw=totaldraw;
 			runwin=totalwin;
 			runlose=totallose;

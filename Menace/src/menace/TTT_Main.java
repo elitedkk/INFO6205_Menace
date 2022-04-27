@@ -11,8 +11,8 @@ public class TTT_Main {
 	public char x;
 	public char o;
 	private int total;
-	private static Tree aifirstplay;
-	private static Tree aisecondplay;
+	//private static Tree aifirstplay;
+	//private static Tree aisecondplay;
 	public static boolean isFinal=false;
 	Tree auto;
 	Tree auto2;
@@ -73,9 +73,9 @@ public class TTT_Main {
 			this.auto = firstPlay;
 			this.runtictactoe(human_sim1, menacePlayer2);
 		}*/
-		logger.info("Number of wins = " + Menace.totalwin);
-		logger.info("Number of losses = " + Menace.totallose);
-		logger.info("Number of draw = " + Menace.totaldraw);
+		logger.debug("Number of wins = " + Menace.totalwin);
+		logger.debug("Number of losses = " + Menace.totallose);
+		logger.debug("Number of draw = " + Menace.totaldraw);
 		
 		
 		/*
@@ -252,11 +252,11 @@ public class TTT_Main {
 	
 	private boolean Mark(int x, int y, Players player) {
 		/*
-		 * Get the command for the mentioned player
-		 * @param x - The player who will be playing this turn
-		 * @param y - The scanner object
+		 * Mark the 
+		 * @param x - x co-ordinate for the move
+		 * @param y - y co-ordinate
 		 * @param player - The player who has just marked
-		 * @return - integer array, 0th element is x co-ordinate, 1st element is y co-ordinate
+		 * @return - boolean returns true if the mark was successful
 		 */
 		if(x>2 || x<0 || y>2 || y<0) {
 			System.out.println("Invalid input, try again");
@@ -278,7 +278,7 @@ public class TTT_Main {
 		/*
 		 * Get the command for the mentioned player
 		 * @param player - The player who will be playing this turn
-		 * @param sc - The scanner object incase a human is playing
+		 * @param prob - If true, the player is going to make a random move
 		 * @return - integer array, 0th element is x co-ordinate, 1st element is y co-ordinate
 		 */
 		if(player.isComputer()) {
