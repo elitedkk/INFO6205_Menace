@@ -32,6 +32,7 @@ public class BeadsDistribution {
 		
 	}
 	
+	
 	public int getByProbability(int random) {
 		int tempSum=0;
 		for(int i=0; i<9; i++) {

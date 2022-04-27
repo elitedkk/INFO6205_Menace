@@ -2,6 +2,9 @@ package menace;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 
@@ -92,14 +95,17 @@ public class Tree {
 
 	
 	public int[] getChildWithValue() {
+		List<int[]> li = new ArrayList<int[]>();
 		for (int i = 0; i < children.length; i++) {
 			for (int j = 0; j < children[i].length; j++) {
 				if (children[i][j] != null && children[i][j].value == value) {
-					return new int[] {i,j};
+					li.add(new int[] {i,j});
 				}
 			}
 		}
-		return null;
+		int size = li.size();
+		int rand = new Menace().getRandomNum(0, size-1);
+		return li.get(rand);
 	}
 
 }

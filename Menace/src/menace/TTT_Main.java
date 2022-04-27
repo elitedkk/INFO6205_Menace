@@ -13,11 +13,13 @@ public class TTT_Main {
 	private int total;
 	private static Tree aifirstplay;
 	private static Tree aisecondplay;
+	public static boolean isFinal=false;
 	Tree auto;
 	Tree auto2;
 	//private boolean[] remaining;
 	char[][] field;
 	public static Scanner sc;
+	public boolean useProb;
 	Menace menace;
 	
 	public TTT_Main() {
@@ -31,10 +33,7 @@ public class TTT_Main {
 		Tree secondPlay = new Tree(new char[3][3], true, this);
 		
 		firstPlay.createTree();
-		System.out.println("win= " + Integer.toString(Tree.win));
-		Tree.win=0;
 		secondPlay.createTree();
-		System.out.println("win= " + Integer.toString(Tree.win));
 		
 		//aifirstplay = firstPlay;
 		//aisecondplay = secondPlay;
@@ -42,35 +41,57 @@ public class TTT_Main {
 		
 		Players p = new Players("My Player",x, true, false);
 		Players human  = new Players("Human", o, false, false);
+
+		Players human_sim1 = new Players("My Player",x, true, false);
+		Players menacePlayer2  = new Players("Menace", o, true, true);
 		
-		Players human_sim = new Players("My Player",x, true, false);
-		Players menacePlayer  = new Players("Menace", o, true, true);
+		Players menacePlayer1  = new Players("Menace", o, true, true);
+		Players human_sim2 = new Players("My Player",x, true, false);
 		
 		menace = new Menace(this);
+		useProb = true;
+		//field=new char[3][3];
 		
-		field=new char[3][3];
-		int turn =0;
-		if(!human_sim.isComputer() || !menacePlayer.isComputer()) {
-			while (turn != 1 && turn != 2) {
-				turn=this.GetHumanWay();
-				if(turn!=1 && turn!=2) System.out.println("Enter a correct value please");
-			}
-		}
-		
-		//Training Meance
 		
 		for(int i=0; i<Menace.trainingGames; i++) {
 			//System.out.println("Starting game number " + Integer.toString(i+1));
-			logger.debug("Starting game number " + Integer.toString(i+1));
+			logger.info("Starting game number " + Integer.toString(i+1));
+			field = new char[3][3];
+			this.auto = secondPlay;
+			if(i== Menace.trainingGames-1) {
+				logger.info("LAST ROUND: --> MOVES");
+				isFinal=true;
+			}
+			this.runtictactoe(menacePlayer1, human_sim2);
+		}
+		
+		//Training Meance for playing second player
+		/*for(int i=0; i<Menace.trainingGames; i++) {
+			//System.out.println("Starting game number " + Integer.toString(i+1));
+			logger.info("Starting game number " + Integer.toString(i+1));
 			field = new char[3][3];
 			this.auto = firstPlay;
-			this.runtictactoe(human_sim, menacePlayer);
-		}
+			this.runtictactoe(human_sim1, menacePlayer2);
+		}*/
 		logger.info("Number of wins = " + Menace.totalwin);
 		logger.info("Number of losses = " + Menace.totallose);
 		logger.info("Number of draw = " + Menace.totaldraw);
 		
 		
+		/*
+		while(true) {
+			menacePlayer1  = new Players("Menace", x, true, true);
+			field = new char[3][3];
+			this.auto= firstPlay;
+			this.runtictactoe(menacePlayer1, human);
+		}*/
+		/*int turn =0;
+		if(!human_sim1.isComputer() || !menacePlayer2.isComputer()) {
+			while (turn != 1 && turn != 2) {
+				turn=this.GetHumanWay();
+				if(turn!=1 && turn!=2) System.out.println("Enter a correct value please");
+			}
+		}*/
 		/*
 		System.out.println("Starting ...");
 		turn=2;
@@ -138,11 +159,7 @@ public class TTT_Main {
 		//int[] co = new int[2];
 		
 		//probability of the human to play in the zone, probBased=true, if in the zone
-		boolean probBased = false;
-		if (p.isComputer() && !p.isMenace()) {
-			int rand = menace.getRandomNum(0, 100);
-			if (rand>Menace.prob) probBased = true;
-		}
+		boolean probBased = getOptimal(p);
 		while(!mark) {
 			if (total> 0) {
 				int[] co  = getCommand(p, probBased);
@@ -156,13 +173,13 @@ public class TTT_Main {
 					if (p.isMenace()) {
 						menace.markConfirmed();
 					}
-					//System.out.println(p.getName() + " marked x=" + Integer.toString(co[0]) + " and y=" + Integer.toString(co[1]));
+					if (isFinal) logger.info(p.getName() + " marked x=" + Integer.toString(co[0]) + " and y=" + Integer.toString(co[1]));
 				}
 			}
 			else break;
 			//System.out.println(Boolean.toString(mark));
 		}
-		//System.out.println(p.getName() + " marked x=" + Integer.toString(co[0]) + " and y=" + Integer.toString(co[1]));
+		//logger.info(p.getName() + " marked x=" + Integer.toString(co[0]) + " and y=" + Integer.toString(co[1]));
 		return gameEnds;
 	}
 	
@@ -321,6 +338,9 @@ public class TTT_Main {
 	}
 	
 	public boolean getTotal(char[][] field) {
+		/*
+		 * Returns true if the passed field does not have any space left to mark
+		 */
 		boolean result = true;
 		for(int i=0;i<field.length;i++) {
 			for(int j=0;j<field[i].length;j++) {
@@ -328,6 +348,18 @@ public class TTT_Main {
 			}
 		}
 		return result;
+	}
+	
+	private boolean getOptimal(Players p) {
+		/*
+		 * Returns true if the "human" might make a mistake in this turn
+		 */
+		if (!useProb) return false;
+		if (p.isComputer() && !p.isMenace()) {
+			int rand = menace.getRandomNum(0, 100);
+			if (rand>Menace.prob) return true;
+		}
+		return false;
 	}
 	
 	public static void main(String[] args) {
