@@ -18,7 +18,6 @@ public class Tree {
 	int value;
 	boolean isMin;
 	TTT_Main ttt;
-	TTT_UI ttt_ui;
 
 	public Tree(char[][] field, boolean isMin, TTT_Main ttt) {
 		this.field = field;
@@ -94,17 +93,19 @@ public class Tree {
 
 	
 	public int[] getChildWithValue() {
-		List<int[]> li = new ArrayList<int[]>();
+		//List<int[]> li = new ArrayList<int[]>();
 		for (int i = 0; i < children.length; i++) {
 			for (int j = 0; j < children[i].length; j++) {
 				if (children[i][j] != null && children[i][j].value == value) {
-					li.add(new int[] {i,j});
+					//li.add(new int[] {i,j});
+					return new int[] {i,j};
 				}
 			}
 		}
-		int size = li.size();
-		int rand = new Menace().getRandomNum(0, size-1);
-		return li.get(rand);
+		return null;
+		//int size = li.size();
+		//int rand = new Menace().getRandomNum(0, size-1);
+		//return li.get(rand);
 	}
 
 }

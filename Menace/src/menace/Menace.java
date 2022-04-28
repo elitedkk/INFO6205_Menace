@@ -155,10 +155,10 @@ public class Menace {
 		String f = createStringFromField(field);
 		int points = 0;
 		runninggame++;
-		//logger.info(getTimestamp()+" alpha= " + alpha + "; beta= " + beta + "; gamma= " + gamma + "; delta= " + delta + "; p= " + prob);
+		
 		if (condition == 0) {
 			//draw
-			//logger.info(getTimestamp()+" Draw at " + f);
+			logger.info(getTimestamp()+" Draw at " + f);
 			if(TTT_Main.isFinal) logger.info(getTimestamp()+" Menace drew");
 			//System.out.println("Draw at " + f);
 			totaldraw++;
@@ -168,7 +168,7 @@ public class Menace {
 			//win
 			points = Menace.beta;
 			totalwin++;
-			//logger.info(getTimestamp()+" Win at " + f);
+			logger.info(getTimestamp()+" Win at " + f);
 			if(TTT_Main.isFinal) logger.info(getTimestamp()+" Menace won");
 			//System.out.println("Win at " + f);
 		}
@@ -176,7 +176,7 @@ public class Menace {
 			//lose
 			points = Menace.gamma;
 			totallose++;
-			//logger.info(getTimestamp()+" Loss at " + f);
+			logger.info(getTimestamp()+" Loss at " + f);
 			if(TTT_Main.isFinal) logger.info(getTimestamp()+" Menace lost");
 			//System.out.println("Loss at " + f);
 		}
@@ -186,6 +186,7 @@ public class Menace {
 		if(runninggame%10000==0) {
 			//logger.debug(getTimestamp()+" For ten thousand games: -> wins= " + Integer.toString(totalwin-runwin) + " losses= " + Integer.toString(totallose-runlose) + " draws= " + Integer.toString(totaldraw-rundraw));
 			logger.info(getTimestamp()+" Stats for last ten thousang games-> wins= " + Integer.toString(totalwin-runwin) + " losses= " + Integer.toString(totallose-runlose) + " draws= " + Integer.toString(totaldraw-rundraw));
+			logger.info(getTimestamp()+" alpha= " + alpha + "; beta= " + beta + "; gamma= " + gamma + "; delta= " + delta + "; p= " + prob);
 			rundraw=totaldraw;
 			runwin=totalwin;
 			runlose=totallose;

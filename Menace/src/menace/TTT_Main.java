@@ -115,6 +115,7 @@ public class TTT_Main {
 	
 	private void humanPlay() {
 		useProb = false;
+		isFinal=false;
 		while(true) {
 			field = new char[3][3];
 			int turn = getTurnnumber();
@@ -158,21 +159,33 @@ public class TTT_Main {
 		}
 		while(total>0) {
 			gameEnds = RunThePlayer(p1);
-			if(!p1.isComputer() || !p2.isComputer()) drawBoard();
+			if(!p1.isComputer() || !p2.isComputer()) {
+				System.out.println();
+				drawBoard();
+			}
 			if(gameEnds) {
 				//System.out.println("Game has ended. " + p1.getName() + " with " + p1.getMark() + " has won");
 				if (p2.isMenace()) menace.UpdateAfterCondition(field, -1);
 				if (p1.isMenace()) menace.UpdateAfterCondition(field, 1);
+				if(!p1.isComputer() || !p2.isComputer()) {
+					logger.info(getTimestamp()+" "+ p1.getName() + " has won");
+				}
 				break;			
 			}
 			
 			
 			gameEnds = RunThePlayer(p2);
-			if(!p1.isComputer() || !p2.isComputer()) drawBoard();
+			if(!p1.isComputer() || !p2.isComputer()) {
+				System.out.println();
+				drawBoard();
+			}
 			if(gameEnds) {
 				//System.out.println("Game has ended. " + p2.getName() + " with " + p2.getMark() + " has won");
 				if (p2.isMenace()) menace.UpdateAfterCondition(field, 1);
 				if (p1.isMenace()) menace.UpdateAfterCondition(field, -1);
+				if(!p1.isComputer() || !p2.isComputer()) {
+					logger.info(getTimestamp()+" "+ p2.getName() + " has won");
+				}
 				break;
 			}
 			
@@ -181,6 +194,9 @@ public class TTT_Main {
 			//System.out.println("The game drawed out. No one won");
 			if (p2.isMenace()) menace.UpdateAfterCondition(field, 0);
 			if (p1.isMenace()) menace.UpdateAfterCondition(field, 0);
+			if(!p1.isComputer() || !p2.isComputer()) {
+				logger.info(getTimestamp()+" "+ "Game has drawn");
+			}
 		}
 	}
 	
@@ -415,9 +431,9 @@ public class TTT_Main {
 			this.runtictactoe(menacePlayer1, human_sim2);
 		}
 
-		logger.info(getTimestamp()+" Number of wins = " + Menace.totalwin);
-		logger.info(getTimestamp()+" Number of losses = " + Menace.totallose);
-		logger.info(getTimestamp()+" Number of draw = " + Menace.totaldraw);
+		//logger.info(getTimestamp()+" Number of wins = " + Menace.totalwin);
+		//logger.info(getTimestamp()+" Number of losses = " + Menace.totallose);
+		//logger.info(getTimestamp()+" Number of draw = " + Menace.totaldraw);
 	}
 	
 	public static void main(String[] args) {
