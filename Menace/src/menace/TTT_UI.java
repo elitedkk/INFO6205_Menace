@@ -25,12 +25,14 @@ public class TTT_UI implements ActionListener {
     private int total;
     char[][] field;
     private int[] command;
+    private String addr_resource;
 
     public TTT_UI() throws InterruptedException {
 
         new Game_Audio();
-        this.xFile ="/x3.gif";
-        this.oFile="/o3.gif";
+        addr_resource =System.getProperty("user.dir")+"/Menace/src/resources";
+        this.xFile =addr_resource+"/x3.gif";
+        this.oFile=addr_resource+"/o3.gif";
         gameFrame = new JFrame();
         startPanel = new JPanel();
         startPanel.setBackground(Color.BLACK);
@@ -42,7 +44,7 @@ public class TTT_UI implements ActionListener {
         gameFrame.setResizable(false);
         gameFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE); //JFrame.DISPOSE_ON_CLOSE)
         gameFrame.pack();
-        ImageIcon icon = new ImageIcon(this.getClass().getResource("/icon.jpg"));
+        ImageIcon icon = new ImageIcon(addr_resource+"/icon.jpg");
         gameFrame.setIconImage(icon.getImage());
         gameFrame.add(startPanel);
         customizeGUI();
@@ -475,35 +477,35 @@ public class TTT_UI implements ActionListener {
         if(e.getSource() == themeStyle[0])
         {
             //JOptionPane.showMessageDialog(gameFrame,"theme 0 is pressed");
-            this.xFile ="/x4.gif";
-            this.oFile="/o4.gif";
+            this.xFile =addr_resource+"/x4.gif";
+            this.oFile=addr_resource+"/o4.gif";
         }
         if(e.getSource() == themeStyle[1])
         {
             //JOptionPane.showMessageDialog(gameFrame,"theme 1 is pressed");
-            this.xFile ="/x3.gif";
-            this.oFile="/o3.gif";
+            this.xFile =addr_resource+"/x3.gif";
+            this.oFile=addr_resource+"/o3.gif";
         }
         if(e.getSource() == themeStyle[2])
         {
             //JOptionPane.showMessageDialog(gameFrame,"theme 2 is pressed");
-            this.xFile ="/x2.gif";
-            this.oFile="/o2.gif";
+            this.xFile =addr_resource+"/x2.gif";
+            this.oFile=addr_resource+"/o2.gif";
         }
         if(e.getSource() == themeStyle[3])
         {
             //JOptionPane.showMessageDialog(gameFrame,"theme 3 is pressed");
-            this.xFile ="/x.gif";
-            this.oFile="/o.gif";
+            this.xFile =addr_resource+"/x.gif";
+            this.oFile=addr_resource+"/o.gif";
         }
         synchronized (this) {
             if (e.getSource() == bton[0]) {
                 if(currentPlayer.getMark() == 'X')
                 {
-                    bton[0].setIcon(new ImageIcon(this.getClass().getResource(xFile)));
+                    bton[0].setIcon(new ImageIcon(xFile));
                 }
                 else{
-                   bton[0].setIcon(new ImageIcon(this.getClass().getResource(oFile)));
+                   bton[0].setIcon(new ImageIcon(oFile));
                 }
                 int[] co = {0, 0};
                 this.command = co;
@@ -514,10 +516,10 @@ public class TTT_UI implements ActionListener {
             if (e.getSource() == bton[1]) {
                 if(currentPlayer.getMark() == 'X')
                 {
-                    bton[1].setIcon(new ImageIcon(this.getClass().getResource(xFile)));
+                    bton[1].setIcon(new ImageIcon(xFile));
                 }
                 else{
-                    bton[1].setIcon(new ImageIcon(this.getClass().getResource(oFile)));
+                    bton[1].setIcon(new ImageIcon(oFile));
                 }
                 int[] co = {0, 1};
                 this.command = co;
@@ -528,10 +530,10 @@ public class TTT_UI implements ActionListener {
             if (e.getSource() == bton[2]) {
                 if(currentPlayer.getMark() == 'X')
                 {
-                    bton[2].setIcon(new ImageIcon(this.getClass().getResource(xFile)));
+                    bton[2].setIcon(new ImageIcon(xFile));
                 }
                 else{
-                    bton[2].setIcon(new ImageIcon(this.getClass().getResource(oFile)));
+                    bton[2].setIcon(new ImageIcon(oFile));
                 }
                 int[] co = {0, 2};
                 this.command = co;
@@ -542,10 +544,10 @@ public class TTT_UI implements ActionListener {
             if (e.getSource() == bton[3]) {
                 if(currentPlayer.getMark() == 'X')
                 {
-                    bton[3].setIcon(new ImageIcon(this.getClass().getResource(xFile)));
+                    bton[3].setIcon(new ImageIcon(xFile));
                 }
                 else{
-                    bton[3].setIcon(new ImageIcon(this.getClass().getResource(oFile)));
+                    bton[3].setIcon(new ImageIcon(oFile));
                 }
                 int[] co = {1, 0};
                 this.command = co;
@@ -556,10 +558,10 @@ public class TTT_UI implements ActionListener {
             if (e.getSource() == bton[4]) {
                 if(currentPlayer.getMark() == 'X')
                 {
-                    bton[4].setIcon(new ImageIcon(this.getClass().getResource(xFile)));
+                    bton[4].setIcon(new ImageIcon(xFile));
                 }
                 else{
-                    bton[4].setIcon(new ImageIcon(this.getClass().getResource(oFile)));
+                    bton[4].setIcon(new ImageIcon(oFile));
                 }
                 int[] co = {1, 1};
                 this.command = co;
@@ -570,10 +572,10 @@ public class TTT_UI implements ActionListener {
             if (e.getSource() == bton[5]) {
                 if(currentPlayer.getMark() == 'X')
                 {
-                    bton[5].setIcon(new ImageIcon(this.getClass().getResource(xFile)));
+                    bton[5].setIcon(new ImageIcon(xFile));
                 }
                 else{
-                    bton[5].setIcon(new ImageIcon(this.getClass().getResource(oFile)));
+                    bton[5].setIcon(new ImageIcon(oFile));
                 }
                 int[] co = {1, 2};
                 this.command = co;
@@ -584,10 +586,10 @@ public class TTT_UI implements ActionListener {
             if (e.getSource() == bton[6]) {
                 if(currentPlayer.getMark() == 'X')
                 {
-                    bton[6].setIcon(new ImageIcon(this.getClass().getResource(xFile)));
+                    bton[6].setIcon(new ImageIcon(xFile));
                 }
                 else{
-                    bton[6].setIcon(new ImageIcon(this.getClass().getResource(oFile)));
+                    bton[6].setIcon(new ImageIcon(oFile));
                 }
                 int[] co = {2, 0};
                 this.command = co;
@@ -598,10 +600,10 @@ public class TTT_UI implements ActionListener {
             if (e.getSource() == bton[7]) {
                 if(currentPlayer.getMark() == 'X')
                 {
-                    bton[7].setIcon(new ImageIcon(this.getClass().getResource(xFile)));
+                    bton[7].setIcon(new ImageIcon(xFile));
                 }
                 else{
-                    bton[7].setIcon(new ImageIcon(this.getClass().getResource(oFile)));
+                    bton[7].setIcon(new ImageIcon(oFile));
                 }
                 int[] co = {2, 1};
                 this.command = co;
@@ -613,10 +615,10 @@ public class TTT_UI implements ActionListener {
             if (e.getSource() == bton[8]) {
                 if(currentPlayer.getMark() == 'X')
                 {
-                    bton[8].setIcon(new ImageIcon(this.getClass().getResource(xFile)));
+                    bton[8].setIcon(new ImageIcon(xFile));
                 }
                 else{
-                    bton[8].setIcon(new ImageIcon(this.getClass().getResource(oFile)));
+                    bton[8].setIcon(new ImageIcon(oFile));
                 }
                 int[] co = {2, 2};
                 this.command = co;
