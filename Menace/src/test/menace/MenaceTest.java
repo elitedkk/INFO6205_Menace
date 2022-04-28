@@ -9,8 +9,7 @@ import menace.TTT_Main;
 
 import java.sql.Timestamp;
 
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 class MenaceTest {
     private static Logger logger = LoggerFactory.getLogger(MenaceTest.class);
