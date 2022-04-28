@@ -1,8 +1,10 @@
-package menace;
+package test.menace;
 
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import menace.BeadsDistribution;
 
 import java.sql.Timestamp;
 

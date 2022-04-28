@@ -39,7 +39,7 @@ public class TTT_Main {
 		//aisecondplay = secondPlay;
 		
 		
-		p = new Players("My Player",x, true, false);
+		//p = new Players("My Player",x, true, false);
 		human  = new Players("Human", o, false, false);
 
 		human_sim1 = new Players("My Player",x, true, false);
@@ -112,17 +112,44 @@ public class TTT_Main {
 		//this.runtictactoe(p1,human, sc);
 		
 	}
-	private static Timestamp getTimestamp()
-	{
-		return new Timestamp(System.currentTimeMillis());
+	
+	private void humanPlay() {
+		useProb = false;
+		while(true) {
+			field = new char[3][3];
+			int turn = getTurnnumber();
+			if(turn == 1) {
+				this.auto = secondPlay;
+				logger.info("You are playing first");
+				this.runtictactoe(human, human_sim2);
+			}
+			else if (turn == 2) {
+				this.auto = firstPlay;
+				logger.info("You are playing second");
+				this.runtictactoe(human_sim1, human);
+			}
+			
+			
+		}
 	}
-
+	
+	private int getTurnnumber() {
+		int turn =0;
+		while (turn != 1 && turn != 2) {
+			turn=this.GetHumanWay();
+			if(turn!=1 && turn!=2) System.out.println("Enter a correct value please");
+		}
+		return turn;
+	}
+	
+	
 	private void runtictactoe(Players p1, Players p2) {
 		/*
 		 * Start this game
 		 */
 		//remaining = new boolean[9];
 		//Arrays.fill(remaining, false);
+		
 		this.total=9;
 		boolean gameEnds = false;
 		if(!p1.isComputer()) {
@@ -192,24 +219,7 @@ public class TTT_Main {
 		//logger.info(getTimestamp()+" "+p.getName() + " marked x=" + Integer.toString(co[0]) + " and y=" + Integer.toString(co[1]));
 		return gameEnds;
 	}
-	public void menaceTraining()
-	{
-		for(int i=0; i<Menace.trainingGames; i++) {
-			//System.out.println("Starting game number " + Integer.toString(i+1));
-			//logger.info(getTimestamp()+" Starting game number " + Integer.toString(i+1));
-			field = new char[3][3];
-			this.auto = secondPlay;
-			if(i== Menace.trainingGames-1) {
-				logger.info(getTimestamp()+" LAST ROUND: --> MOVES");
-				isFinal=true;
-			}
-			this.runtictactoe(menacePlayer1, human_sim2);
-		}
-
-		logger.info(getTimestamp()+" Number of wins = " + Menace.totalwin);
-		logger.info(getTimestamp()+" Number of losses = " + Menace.totallose);
-		logger.info(getTimestamp()+" Number of draw = " + Menace.totaldraw);
-	}
+	
 	
 	public boolean CheckIfWin(char[][] field, TTT_Main ttt) {
 		Players p1 = new Players("Player 1",x, true, false);
@@ -326,6 +336,7 @@ public class TTT_Main {
 					//co = new int[] {i,j};
 				}
 				else {
+					//System.out.println("Run");
 					co= this.auto.getChildWithValue();
 				}
 				//System.out.println("Order from the player");
@@ -389,12 +400,37 @@ public class TTT_Main {
 		return false;
 	}
 	
+	public void menaceTraining()
+	{
+		useProb = true;
+		for(int i=0; i<Menace.trainingGames; i++) {
+			//System.out.println("Starting game number " + Integer.toString(i+1));
+			//logger.info(getTimestamp()+" Starting game number " + Integer.toString(i+1));
+			field = new char[3][3];
+			this.auto = secondPlay;
+			if(i== Menace.trainingGames-1) {
+				logger.info(getTimestamp()+" LAST ROUND: --> MOVES");
+				isFinal=true;
+			}
+			this.runtictactoe(menacePlayer1, human_sim2);
+		}
+
+		logger.info(getTimestamp()+" Number of wins = " + Menace.totalwin);
+		logger.info(getTimestamp()+" Number of losses = " + Menace.totallose);
+		logger.info(getTimestamp()+" Number of draw = " + Menace.totaldraw);
+	}
+	
 	public static void main(String[] args) {
 		logger.info(getTimestamp()+" Starting the program");
 		sc= new Scanner(System.in);
 		TTT_Main tttM = new TTT_Main();
 		tttM.menaceTraining();
+		tttM.humanPlay();
 		sc.close();
 	}
-
+	
+	private static Timestamp getTimestamp()
+	{
+		return new Timestamp(System.currentTimeMillis());
+	}
 }
