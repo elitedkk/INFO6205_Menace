@@ -1,5 +1,4 @@
-# INFO6205_Menace
-INFO6205 Semester Project
+# Menace
 
 1. Build and run TTT_Main for running the program.
 2. Ignore Tree_UI and TTT_UI
